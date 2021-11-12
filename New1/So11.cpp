@@ -71,8 +71,6 @@ private:
 	string DiaChi;
 	float Luong;
 	float TienThuong;
-	string getTen();
-	string getMa();
 public:
 	//ham tao ham huy 
 	Nguoi();
@@ -82,8 +80,6 @@ public:
 	virtual void Nhap();
 	virtual void Xuat();
 	virtual float TinhLuong() = 0;
-	float getLuong();
-	float getTienThuong();
 	friend class QuanLiNhanVien;
 };
 
@@ -149,20 +145,6 @@ void Nguoi::Xuat()
 	cout<<"\tDia Chi: "<<DiaChi<<endl;
 }
 
-float Nguoi::getLuong()
-{
-	return Luong;
-}
-float Nguoi::getTienThuong()
-{
-	return TienThuong;
-}
-string Nguoi::getTen(){
-	return HoTen;
-}
-string Nguoi::getMa(){
-	return Ma;
-}
 
 		//=============================THONG TIN NHAN VIEN===========================
 		
@@ -316,7 +298,7 @@ void NhanVienThuViec::Xuat()
 }
 
 float NhanVienThuViec::TinhLuong(){
-	
+	return (LuongTheoGio*8);
 }
 //==============================Ham Nhap ================================
 
