@@ -13,6 +13,14 @@
 #define RIGHT 77
 #define LEFT 75 
 
+#define boxx 15 //Vi tri x bat dau cua box
+#define boxy 13 //Vi tri y bat dau cua box
+#define boxs 60 //Box size
+#define tabx 6 // vi tri x bat dau cua table
+#define taby 4  // vi tri y bat dau cua table
+#define tabs 90 // table box
+#define tabw 23 // table hight
+
 #define F1 59
 #define F2 60
 #define F3 61
@@ -34,7 +42,7 @@ void gotoxy(short x, short y)
         hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
         SetConsoleCursorPosition(hConsoleOutput , Cursor_an_Pos);
 }
-void SetColor(WORD color)
+void textcolor(WORD color)
 {
     HANDLE hConsoleOutput;
     hConsoleOutput = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -79,16 +87,6 @@ void SetWindowSize(SHORT width, SHORT height)
     SetConsoleWindowInfo(hStdout, 1, &WindowSize);
 }
 //------------------an hien con tro-------------------
-void ShowCur(bool CursorVisibility)
-{
-	HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO ConCurInf;
-    
-    ConCurInf.dwSize = 10;
-    ConCurInf.bVisible = CursorVisibility;
-    
-    SetConsoleCursorInfo(handle, &ConCurInf);
-}
 //---------------------------------------Ngay Thang------------------------------------------
 class Day
 {
@@ -130,10 +128,8 @@ Day::~Day()
 }
 
 void Day::NhapDay()
-{
-	char PhanChia;   //phan chia dung ki tu "/"
-	cout << "(dd/mm/yyyy):  ";
-	cin >> ngay >> PhanChia >> thang >> PhanChia >> nam;
+{ 
+	cin >> ngay ;cout<< "/";cin >> thang ;cout<< "/" ; cin>> nam;
 }
 
 void Day::XuatDay()
@@ -197,24 +193,18 @@ Nguoi::~Nguoi()
 
 void Nguoi::Nhap()
 {
-	
-	cout<<"\tNhap Vao Ma So Nhan Vien: ";
 	fflush(stdin);
 	getline(cin,Ma);
-	cout<<"\tNhap Ho Va Ten (Day Du): ";
 	fflush(stdin);
 	getline(cin,HoTen);
-	cout<<"\tNhap So Tuoi: ";
 	cin >> Tuoi;
-	cout<<"\tNhap Ngay Sinh  ";
 	NgaySinh.NhapDay();
-	cout<<"\tNhap Gioi Tinh: ";
 	fflush(stdin);
 	getline(cin,GioiTinh);
-	cout<<"\tNhap Dia Chi: ";
 	fflush(stdin);
 	getline(cin,DiaChi);
 }
+
 
 void Nguoi::Xuat()
 {
@@ -278,6 +268,7 @@ float NhanVienChinhThuc::TinhLuong()
 {
 	return (HeSoLuong*1600*0.8);
 }
+
 void Sua(NhanVienChinhThuc &a)
 {
 	
@@ -352,6 +343,7 @@ void NhanVienLamTheoSanPham::Xuat()
 	cout<<"\tSo Luong Hang Hoa: "<<SoLuongHang<<endl;
 	cout<<"\tVao Gia Hang: "<<GiaHang<<endl;
 }
+
 float NhanVienLamTheoSanPham::TinhLuong(){
 	return (SoLuongHang *GiaHang);
 }
@@ -418,9 +410,9 @@ public:
 	void insertafter(Node* p, Nguoi *nv);
 	void TimKiemTen();
 	void TimKiemMa();
-	void DemNhanVien();
 	void SuaNhanVien();
 	Node *previous(Node *p); 
+	void DemNhanVien();
 	void removefirst();
 	void removelast();
 	void XoaNhanVien();
@@ -450,6 +442,7 @@ QuanLiNhanVien::~QuanLiNhanVien()
 	delete tail;
 	size = 0;
 }
+
 Node* QuanLiNhanVien::CreateNode(Nguoi *nv)
 {
 	Node* p = new Node;
@@ -457,6 +450,7 @@ Node* QuanLiNhanVien::CreateNode(Nguoi *nv)
 	p->next = NULL;
 	return p;
 }
+
 void QuanLiNhanVien::AddLast(Nguoi *nv) {
     Node *p = CreateNode(nv);
     if (size == 0) {
@@ -488,6 +482,7 @@ void QuanLiNhanVien::XuatDS(){
 		p->data->Xuat();
     }
 }
+
 void QuanLiNhanVien::insertafter(Node* p, Nguoi *nv){
 	if (p == tail)
         AddLast(nv);
@@ -498,6 +493,7 @@ void QuanLiNhanVien::insertafter(Node* p, Nguoi *nv){
     }
     size++;
 }
+
 void QuanLiNhanVien::TimKiemTen(){
 	string TenTK;
 
@@ -526,6 +522,7 @@ Node* QuanLiNhanVien::previous(Node *p) {
 		t = t->next;
 	return t;
 }
+
 void QuanLiNhanVien::removefirst(){
     if (size == 0)
         return;
@@ -586,6 +583,7 @@ void QuanLiNhanVien::swapData(Node *p, Node *q){
     p->data = q->data;
     q->data = temp;
 }
+
 void QuanLiNhanVien::SapXepTen(){
 	Node*temp;
 	for(Node*p=head;p!=tail;p=p->next){
@@ -596,6 +594,7 @@ void QuanLiNhanVien::SapXepTen(){
 		}
 	}
 }
+
 void QuanLiNhanVien::SapXepMa(){
 	Node*temp;
 	for(Node*p=head;p!=tail;p=p->next){
@@ -606,6 +605,7 @@ void QuanLiNhanVien::SapXepMa(){
 		}
 	}
 }
+
 void QuanLiNhanVien::MaxLuong(){
 	Node*p=head;
 	Nguoi *Max=head->data;
@@ -628,7 +628,8 @@ void QuanLiNhanVien::MinLuong(){
 	}
 	cout<<"Nhan Vien co Luong cao nhat"<<endl;
 	Min->Xuat();
-}            
+}    
+        
 void QuanLiNhanVien::TongLuong(){
 	float Tong=0;
 	for(Node*p=head;p!=NULL;p=p->next){
@@ -650,6 +651,7 @@ void QuanLiNhanVien::TimKiemMa(){
 		}
 	}
 }	
+
 void QuanLiNhanVien::SuaNhanVien(){
 	int chon, chon1, chon2, chon3;
 	int Flat= 1 , Tlat=1;
@@ -932,17 +934,135 @@ void QuanLiNhanVien::SuaNhanVien(){
 
 
 
+void Box_Nhap()
+{        
+	textcolor(15);
+	
+	gotoxy(boxx, boxy); cout << char(201);
+	for(int i = 1; i < boxs + 1; i++) cout << char(205);
+	cout << char(187);
+	gotoxy(boxx, boxy + 1); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 1); cout << char(186);
+	gotoxy(boxx, boxy + 2); cout << char(186)<< "	Ma NV: ";
+	gotoxy(boxx + boxs + 1, boxy + 2); cout << char(186);
+	gotoxy(boxx, boxy + 3); cout << char(186) ;
+	gotoxy(boxx + boxs + 1, boxy + 3); cout << char(186);
+	gotoxy(boxx, boxy + 4); cout << char(186)<< "	Ho Ten: ";
+	gotoxy(boxx + boxs + 1, boxy + 4); cout << char(186);
+	gotoxy(boxx, boxy + 5); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 5); cout << char(186);
+	gotoxy(boxx, boxy + 6); cout << char(186)<< "	Tuoi: ";
+	gotoxy(boxx + boxs + 1, boxy + 6); cout << char(186);
+	gotoxy(boxx, boxy + 7); cout << char(186) ;
+	gotoxy(boxx + boxs + 1, boxy + 7); cout << char(186);
+	gotoxy(boxx, boxy + 8); cout << char(186)<< "	Ngay Sinh: ";
+	gotoxy(boxx + boxs + 1, boxy + 8); cout << char(186);
+	gotoxy(boxx, boxy + 9); cout << char(186) ;
+	gotoxy(boxx + boxs + 1, boxy + 9); cout << char(186);
+	gotoxy(boxx, boxy + 10); cout << char(186)<< "	Gioi Tinh: ";
+	gotoxy(boxx + boxs + 1, boxy + 10); cout << char(186);
+	gotoxy(boxx, boxy + 11); cout << char(186) ;
+	gotoxy(boxx + boxs + 1, boxy + 11); cout << char(186);
+	gotoxy(boxx, boxy + 12); cout << char(186)<< "	Dia Chi: ";
+	gotoxy(boxx + boxs + 1, boxy + 12); cout << char(186);
+	
+}
+
+void Box_Nhap1()
+{
+	textcolor(15);
+	gotoxy(boxx, boxy + 13); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 13); cout << char(186);
+	gotoxy(boxx, boxy + 14); cout << char(186)<< "	ChucVu: ";
+	gotoxy(boxx + boxs + 1, boxy + 14); cout << char(186);
+	gotoxy(boxx, boxy + 15); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 15); cout << char(186);
+	gotoxy(boxx, boxy + 16); cout << char(186)<< "	Tham Nien: ";
+	gotoxy(boxx + boxs + 1, boxy + 16); cout << char(186);
+	gotoxy(boxx, boxy + 17); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 17); cout << char(186);
+	gotoxy(boxx, boxy + 18); cout << char(186)<< "	Bo Phan: ";
+	gotoxy(boxx + boxs + 1, boxy + 18); cout << char(186);
+	gotoxy(boxx, boxy + 19); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 19); cout << char(186);
+	gotoxy(boxx, boxy + 20); cout << char(186)<< "	He So luong: ";
+	gotoxy(boxx + boxs + 1, boxy + 20); cout << char(186);
+	gotoxy(boxx, boxy + 21); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 21); cout << char(186);
+	gotoxy(boxx, boxy + 22); cout << char(200);
+	for(int i = 1; i < boxs + 1; i++) cout << char(205);
+	cout << char(188); 
+}
+
+void Box_Nhap2()
+{
+	textcolor(15);
+	gotoxy(boxx, boxy + 13); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 13); cout << char(186);
+	gotoxy(boxx, boxy + 14); cout << char(186)<< "	So Gio Lam: ";
+	gotoxy(boxx + boxs + 1, boxy + 14); cout << char(186);
+	gotoxy(boxx, boxy + 15); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 15); cout << char(186);
+	gotoxy(boxx, boxy + 16); cout << char(186)<< "	So Luong Theo Gio: ";
+	gotoxy(boxx + boxs + 1, boxy + 16); cout << char(186);
+	gotoxy(boxx, boxy + 17); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 17); cout << char(186);
+	gotoxy(boxx, boxy + 18); cout << char(200);
+	for(int i = 1; i < boxs + 1; i++) cout << char(205);
+	cout << char(188); 
+}
+
+void Box_Nhap3()
+{
+	textcolor(15);
+	gotoxy(boxx, boxy + 13); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 13); cout << char(186);
+	gotoxy(boxx, boxy + 14); cout << char(186)<< "	So Luong Hang: ";
+	gotoxy(boxx + boxs + 1, boxy + 14); cout << char(186);
+	gotoxy(boxx, boxy + 15); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 15); cout << char(186);
+	gotoxy(boxx, boxy + 16); cout << char(186)<< "	Gia Hang: ";
+	gotoxy(boxx + boxs + 1, boxy + 16); cout << char(186);
+	gotoxy(boxx, boxy + 17); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 17); cout << char(186);
+	gotoxy(boxx, boxy + 18); cout << char(200);
+	for(int i = 1; i < boxs + 1; i++) cout << char(205);
+	cout << char(188); 
+}
+
+void Box_Nhap4()
+{
+	textcolor(15);
+	gotoxy(boxx, boxy + 13); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 13); cout << char(186);
+	gotoxy(boxx, boxy + 14); cout << char(186)<< "	Ngay Vao Lam: ";
+	gotoxy(boxx + boxs + 1, boxy + 14); cout << char(186);
+	gotoxy(boxx, boxy + 15); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 15); cout << char(186);
+	gotoxy(boxx, boxy + 16); cout << char(186)<< "	Luong Theo Gio: ";
+	gotoxy(boxx + boxs + 1, boxy + 16); cout << char(186);
+	gotoxy(boxx, boxy + 17); cout << char(186);
+	gotoxy(boxx + boxs + 1, boxy + 17); cout << char(186);
+	gotoxy(boxx, boxy + 18); cout << char(200);
+	for(int i = 1; i < boxs + 1; i++) cout << char(205);
+	cout << char(188); 
+}
 //==============================Ham Nhap ================================
 
 void NhapDS (QuanLiNhanVien &QL)
 {
-	system("cls");
+	
+	
 	Nguoi *nv;
 	int SL1,SL2,SL3,SL4;
-	cout<<"Nhap so Luong Nhan Vien Chinh Thuc:";
+	gotoxy(10,11);cout <<"                               NHAP DANH SACH";
+	gotoxy(6,13);cout<<"Nhap so Luong Nhan Vien Chinh Thuc:";
 	cin>>SL1;
 	for (int i = 0; i < SL1; i++)
 	{
+		system("cls");
+		Box_Nhap();
+		Box_Nhap1();
 		nv = new NhanVienChinhThuc;
 		cout<<"\nNhan vien thu "<<i+1<<": "<<endl;
 		nv->Nhap();
@@ -952,6 +1072,9 @@ void NhapDS (QuanLiNhanVien &QL)
 	cin>>SL2;
 	for (int i = 0; i < SL2; i++)
 	{
+		system("cls");
+		Box_Nhap();
+		Box_Nhap2();
 		nv = new NhanVienBanThoiGian;
 		cout<<"\nNhan vien thu "<<i+1<<": "<<endl;
 		nv->Nhap();
@@ -961,6 +1084,9 @@ void NhapDS (QuanLiNhanVien &QL)
 	cin>>SL3;
 	for (int i = 0; i < SL3; i++)
 	{
+		system("cls");
+		Box_Nhap();
+		Box_Nhap3();
 		nv = new NhanVienLamTheoSanPham;
 		cout<<"\nNhan vien thu "<<i+1<<": "<<endl;
 		nv->Nhap();
@@ -970,12 +1096,16 @@ void NhapDS (QuanLiNhanVien &QL)
 	cin>>SL4;
 	for (int i = 0; i < SL4; i++)
 	{
+		system("cls");
+		Box_Nhap();
+		Box_Nhap4();
 		nv = new NhanVienThuViec;
 		cout<<"\nNhan vien thu "<<i+1<<": "<<endl;
 		nv->Nhap();
 		QL.AddLast(nv);
 	}
 }
+//--------------------------
 void ThemNhanVien(QuanLiNhanVien &QL)
 {
 	Nguoi *nv;
@@ -995,7 +1125,7 @@ Menu:
 			if (c = getch())
 				break;
 		}
-		SetColor(i++);
+		textcolor(i++);
 		if (i == 19)
 		{
 			i = 15;
@@ -1012,7 +1142,7 @@ Menu:
 	while(Flat)
 	{
 		gotoxy(x, y);
-		SetColor(15);
+		textcolor(15);
 		switch (y)
 		{
 			case 15: gotoxy(15, 16); cout << text[0]; break;
@@ -1025,7 +1155,7 @@ Menu:
 		if (NhanNut == UP)
 		{
 			gotoxy(x, y);
-			SetColor(15);
+			textcolor(15);
 			switch (y)
 			{
 				case 15: gotoxy(15, 16); cout << text[0]; break;
@@ -1043,7 +1173,7 @@ Menu:
 		else if (NhanNut == DOWN)
 		{
 			gotoxy(x, y);
-			SetColor(15);
+			textcolor(15);
 			switch (y)
 			{
 				case 15: gotoxy(15, 16); cout << text[0]; break;
@@ -1060,7 +1190,7 @@ Menu:
 		}
 		if (y == 15 && NhanNut == ENTER)
 		{	
-			SetColor(15);
+			textcolor(15);
 			system("cls");	
 			while(p !=NULL)
 			{
@@ -1076,7 +1206,7 @@ Menu:
 		}
 		else if (y == 16 && NhanNut == ENTER)
 		{	
-			SetColor(15);
+			textcolor(15);
 			system("cls");
 			while(p !=NULL)
 			{
@@ -1092,7 +1222,7 @@ Menu:
 		}
 		else if (y == 17 && NhanNut == ENTER)
 		{
-			SetColor(15);
+			textcolor(15);
 			system("cls");
 			while(p !=NULL)
 			{
@@ -1108,7 +1238,7 @@ Menu:
 		}
 		else if (y == 18 && NhanNut == ENTER)
 		{		
-			SetColor(15);
+			textcolor(15);
 			system("cls");
 			while(p !=NULL)
 			{
@@ -1125,7 +1255,7 @@ Menu:
 		else if (y == 19 && NhanNut == ENTER)
 		{
 			Flat = 1;
-			SetColor(15);
+			textcolor(15);
 		}
 	}
 }
@@ -1143,6 +1273,7 @@ void Menu()
 	int NhanNut;
 	char text[14][100]={" 1. NHAP NHAN VIEN ", " 2. XUAT NHAN VIEN ", " 3. THEM NHAN VIEN "," 4. SUA NHAN VIEN "," 5. TONG SO NHAN VIEN ", " 6. TIM KIEM NHAN VIEN THEO TEN ", " 7. TIM KIEM NHAN VIEN THEO MA ",
 	" 8. XOA NHAN VIEN " , " 9. SAP XEP THEO TEN NHAN VIEN ", "10. SAP XEP THEO MA NHAN VIEN ","11. MAX LUONG ", "12. MIN LUONG ","13. TONG LUONG ", "14. KET THUC CHUONG TRINH "};
+	
 Menu:	
 	SetWindowSize(100, 40);
 	int c = 0;
@@ -1154,7 +1285,7 @@ Menu:
 			if (c = getch())
 				break;
 		}
-		SetColor(i++);
+		textcolor(i++);
 		if (i == 15)
 		{
 			i = 1;
@@ -1162,7 +1293,7 @@ Menu:
 		system("cls");
      	gotoxy(10, 5); cout <<     "                                 QUAN LY NHAN VIEN ";
 		Sleep(500);
-	} while (1);
+	} while (true);
 	gotoxy(15, 16); cout << text[0];
 	gotoxy(15, 17); cout << text[1];
 	gotoxy(15, 18); cout << text[2];
@@ -1179,9 +1310,24 @@ Menu:
 	gotoxy(15, 29); cout << text[13];
 	
 	do{
-		
+		do {
+	
+		if (kbhit())
+		{
+			if (c = getch())
+				break;
+		}
+		textcolor(i++);
+		if (i == 15)
+		{
+			i = 1;
+		}
+		system("cls");
+     	gotoxy(10, 5); cout <<     "                                 QUAN LY NHAN VIEN ";
+		Sleep(500);
+		} while (true);
 		gotoxy(x, y);
-		SetColor(15);
+		textcolor(15);
 		switch (y)
 		{
 			case 1: gotoxy(15, 16); cout << text[0]; break;
@@ -1203,7 +1349,7 @@ Menu:
 		if (NhanNut == UP)
 		{
 			gotoxy(x, y);
-			SetColor(15);
+			textcolor(15);
 			switch (y)
 			{
 				case 1: gotoxy(15, 16); cout << text[0]; break;
@@ -1230,7 +1376,7 @@ Menu:
 		else if (NhanNut == DOWN)
 		{
 			gotoxy(x, y);
-			SetColor(15);
+			textcolor(15);
 			switch (y)
 			{
 				case 1: gotoxy(15, 16); cout << text[0]; break;
@@ -1257,94 +1403,94 @@ Menu:
 
 		if (y == 1 && NhanNut == ENTER)
 		{
-			SetColor(15);
+			textcolor(15);
 			system("cls");
 			NhapDS(t);
 			goto Menu;
 		}
 		else if (y == 2 && NhanNut == ENTER)
 		{
-			SetColor(15);
+			textcolor(15);
 			system("cls");
 			t.XuatDS();
 			goto Menu;
 		}
 		else if (y == 3 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			ThemNhanVien(t);
 			goto Menu;
 		}
 		else if (y == 4 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.SuaNhanVien();
 			goto Menu;
 		}
 		else if (y == 5 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.DemNhanVien();
 			goto Menu;
 		}
 		else if (y == 6 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.TimKiemTen();
 			goto Menu;
 		}
 		else if (y == 7 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.TimKiemMa();
 			goto Menu;
 		}
 		else if (y == 8 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.XoaNhanVien();
 			goto Menu;
 		}
 		else if (y == 9 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.SapXepTen();
 			t.XuatDS();
 			goto Menu;
 		}
 		else if (y == 10 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.SapXepMa();
 			t.XuatDS();
 			goto Menu;
 		}
 		else if (y == 11 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.MaxLuong();
 			goto Menu;
 		}
 		else if (y == 12 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.MinLuong();
 			goto Menu;
 		}
 		else if (y == 13 && NhanNut == ENTER)
 		{
-			SetColor(15);
-		//	system("cls");
+			textcolor(15);
+			system("cls");
 			t.TongLuong();
 			goto Menu;
 		}
@@ -1352,8 +1498,9 @@ Menu:
 		else if (y == 14 && NhanNut == ENTER)
 		{
 			exit(0);
-			SetColor(15);
+			textcolor(15);
 		}	
+		
 	} while (true);
 }	
 int main()
